@@ -1,5 +1,5 @@
 {
-  "name": "@cj/react-full-page-scroller",
+  "name": "@carlosjunod/react-full-page-scroller",
   "version": "1.0.1",
   "description": "A React component for full-viewport animated scrolling (vertical & horizontal) using Framer Motion",
   "main": "dist/index.cjs.js",

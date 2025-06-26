@@ -1,4 +1,4 @@
-# @cj/react-full-page-scroller
+# @carlosjunod/react-full-page-scroller
 
 A fully-featured React component for “full-page” scrollable slides. Supports vertical or horizontal
 scroll, animated transitions via Framer Motion, SSR-safe usage, optional dot navigation controls,
@@ -9,9 +9,9 @@ and a React Context API for programmatic control.
 ## 📦 Installation
 
 ```bash
-npm install @cj/react-full-page-scroller
+npm install @carlosjunod/react-full-page-scroller
 # or
-yarn add @cj/react-full-page-scroller
+yarn add @carlosjunod/react-full-page-scroller
 ```
 
 ---
@@ -20,7 +20,7 @@ yarn add @cj/react-full-page-scroller
 
 ```jsx
 import React from 'react';
-import FullPageScroller from '@cj/react-full-page-scroller';
+import FullPageScroller from '@carlosjunod/react-full-page-scroller';
 
 import SectionOne from './SectionOne';
 import SectionTwo from './SectionTwo';
@@ -42,6 +42,7 @@ export default function App() {
 ## ⚙️ Full-Feature Example
 
 This demonstrates:
+
 1. Context-based navigation from anywhere  
 2. Dot controls on the **right**  
 3. Horizontal scroll  
@@ -55,7 +56,7 @@ import {
   FullPageScroller,
   FullPageScrollerProvider,
   useFullPageScroller
-} from '@cj/react-full-page-scroller';
+} from '@carlosjunod/react-full-page-scroller';
 
 // Custom dot component
 function MyDot({ active }) {
