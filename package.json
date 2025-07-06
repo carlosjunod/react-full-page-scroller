@@ -21,6 +21,7 @@
   "bugs": {
     "url": "https://github.com/carlosjunod/react-full-page-scroller/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/carlosjunod/react-full-page-scroller#readme",
   "keywords": [
     "react",
@@ -32,16 +33,17 @@
   "author": "Carlos Junod <carlos@junod.cl>",
   "license": "MIT",
   "peerDependencies": {
+    "framer-motion": ">=4.0.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "framer-motion": ">=4.0.0"
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
-    "rollup": "^3.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "@rollup/plugin-babel": "^6.0.0",
     "@babel/core": "^7.0.0",
-    "@babel/preset-react": "^7.0.0"
+    "@babel/preset-react": "^7.0.0",
+    "@rollup/plugin-babel": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "prop-types": "^15.8.1",
+    "rollup": "^3.0.0"
   },
   "engines": {
     "node": ">=14"

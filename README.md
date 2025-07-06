@@ -1,8 +1,8 @@
 # @carlosjunod/react-full-page-scroller
 
-A fully-featured React component for “full-page” scrollable slides. Supports vertical or horizontal
-scroll, animated transitions via Framer Motion, SSR-safe usage, optional dot navigation controls,
-and a React Context API for programmatic control.
+A fully-featured React component for “full-page” scrollable slides. Supports vertical or horizontal scroll
+(mouse wheel or touch swipe), animated transitions via Framer Motion, SSR-safe usage, optional dot
+navigation controls, and a React Context API for programmatic control.
 
 ---
 
@@ -127,6 +127,7 @@ export default function App() {
 | `onScroll`       | `(newPage) => void`                    | —           | Called once threshold is passed                                                      |
 | `onScrollEnd`    | `(newPage) => void`                    | —           | Called after animation completes                                                     |
 | `fallback`       | `ReactNode`                            | `null`      | Suspense fallback for lazy-loaded slides                                             |
+| `enabled`        | `boolean`                              | `true`      | When `false`, disables full-page scrolling and allows normal scrolling behavior       |
 
 ### Context API
 

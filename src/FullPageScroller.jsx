@@ -25,6 +25,7 @@ const FullPageScrollerCore = forwardRef(({
   onScroll,
   onScrollEnd,
   fallback = null,
+  enabled = true,
 }, ref) => {
   const isClient = typeof window !== 'undefined';
   const items = React.Children.toArray(children);
@@ -33,21 +34,27 @@ const FullPageScrollerCore = forwardRef(({
   const prevPage = useRef(page);
   const containerRef = useRef(null);
   const delta = useRef(0);
+  const touchStart = useRef(0);
 
   // Imperative API
-  useImperativeHandle(ref, () => ({
-    next: () => changePage(page + 1),
-    prev: () => changePage(page - 1),
-    goTo: (i) => changePage(i),
-    getCurrentPage: () => page,
-  }), [page]);
+  useImperativeHandle(
+    ref,
+    () => ({
+      next: () => changePage(page + 1),
+      prev: () => changePage(page - 1),
+      goTo: (i) => changePage(i),
+      getCurrentPage: () => page,
+    }),
+    [page]
+  );
 
   useEffect(() => {
     prevPage.current = page;
   }, [page]);
 
   const changePage = (newPage) => {
-    if (!isClient || newPage < 0 || newPage >= items.length || isAnimating.current) return;
+    if (!isClient || newPage < 0 || newPage >= items.length || isAnimating.current)
+      return;
     onScrollStart?.(newPage);
     onScroll?.(newPage);
     isAnimating.current = true;
@@ -69,13 +76,39 @@ const FullPageScrollerCore = forwardRef(({
     else if (delta.current < -threshold) changePage(page - 1);
   };
 
-  useEffect(() => {
+  const handleTouchStart = (e) => {
     if (!isClient) return;
+    touchStart.current = axis === 'vertical'
+      ? e.touches[0].clientY
+      : e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isClient) return;
+    if (isAnimating.current) return;
+    const current = axis === 'vertical'
+      ? e.touches[0].clientY
+      : e.touches[0].clientX;
+    const d = touchStart.current - current;
+    if (d > threshold) changePage(page + 1);
+    else if (d < -threshold) changePage(page - 1);
+    touchStart.current = current;
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    if (!isClient || !enabled) return;
     const el = containerRef.current;
     if (!el) return;
     el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, [page, axis, isClient]);
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', handleWheel);
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [page, axis, isClient, enabled, threshold]);
 
   // Dot control container style
   const controlStyles = useMemo(() => {
@@ -99,6 +132,14 @@ const FullPageScrollerCore = forwardRef(({
   }, [controlPos]);
 
   const axisProp = axis === 'vertical' ? 'y' : 'x';
+
+  if (!enabled) {
+    const wrapperStyle =
+      axis === 'horizontal'
+        ? { display: 'flex', flexDirection: 'row' }
+        : undefined;
+    return <div style={wrapperStyle}>{children}</div>;
+  }
 
   return (
     <div
@@ -165,6 +206,7 @@ export const FullPageScrollerProvider = ({
   controlPos,
   dotComponent,
   fallback,
+  enabled,
 }) => {
   const ref = useRef();
   const [currentPage, setCurrentPage] = useState(0);
@@ -183,16 +225,17 @@ export const FullPageScrollerProvider = ({
   const enhanced = React.Children.map(children, (child) =>
     React.isValidElement(child) && child.type.displayName === 'FullPageScrollerCore'
       ? React.cloneElement(child, {
-        ref,
-        axis,
-        threshold,
-        duration,
-        control,
-        controlPos,
-        dotComponent,
-        fallback,
-        onScrollEnd: handleEnd,
-      })
+          ref,
+          axis,
+          threshold,
+          duration,
+          control,
+          controlPos,
+          dotComponent,
+          fallback,
+          enabled,
+          onScrollEnd: handleEnd,
+        })
       : child
   );
 
