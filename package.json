@@ -4,6 +4,10 @@
   "description": "A React component for full-viewport animated scrolling (vertical & horizontal) using Framer Motion",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "exports": {
+    "require": "./dist/index.cjs.js",
+    "import": "./dist/index.esm.js"
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist"
